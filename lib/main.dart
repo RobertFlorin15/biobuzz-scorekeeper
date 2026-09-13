@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scorekeeper_biobuzz/pages/StartPage.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,7 +12,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+      home: StartPage(),
     );
   }
 }
