@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scorekeeper_biobuzz/widgets/CheckboxWidget.dart';
 import 'package:scorekeeper_biobuzz/widgets/CounterWidget.dart';
-import 'package:scorekeeper_biobuzz/ScoreController.dart';
+import 'package:scorekeeper_biobuzz/util/ScoreController.dart';
 
 class SoloTrainingPage extends StatefulWidget {
   const SoloTrainingPage({super.key});

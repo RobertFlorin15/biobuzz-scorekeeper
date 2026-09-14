@@ -26,7 +26,7 @@ class ScoreController {
     totalScore += teleopHiveTips * 20;
     totalScore += teleopGardenElements * 1;
     if (teleopBottomNectar) totalScore += 5;
-    totalScore += teleopFlowerElements * 2;
+    if (teleopFlowerOwner) totalScore += teleopFlowerElements * 2;
 
     totalScore += postMatchCellElements * 2;
     if (postMatchPark) totalScore += 5;

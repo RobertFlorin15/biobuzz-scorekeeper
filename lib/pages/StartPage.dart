@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scorekeeper_biobuzz/pages/SoloTrainingPage.dart';
+import 'package:scorekeeper_biobuzz/pages/SoloTrainingTimerPage.dart';
+import 'package:scorekeeper_biobuzz/widgets/ElevatedButtonStartPage.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -23,31 +25,17 @@ class StartPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      backgroundColor: Colors.amber,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 8,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SoloTrainingPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'TRAINING SOLO',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+
+                  const ElevatedButtonStartPage(
+                    text: 'TRAINING SOLO TIMER',
+                    destinationPage: SoloTrainingTimerPage(),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  const ElevatedButtonStartPage(
+                    text: 'TRAINING SOLO',
+                    destinationPage: SoloTrainingPage(),
                   ),
                 ],
               ),
