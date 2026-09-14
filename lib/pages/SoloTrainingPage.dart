@@ -11,6 +11,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
   int _totalScore = 0;
 
   bool _autoLeave = false;
+  bool _autoPark = false;
   int _autoHiveTips = 0;
   int _autoGardenElements = 0;
 
@@ -27,6 +28,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
     setState(() {
       _totalScore = 0;
       if (_autoLeave) _totalScore += 3;
+      if (_autoPark) _totalScore += 5;
       _totalScore += _autoHiveTips * 20;
       _totalScore += _autoGardenElements * 1;
 
@@ -45,6 +47,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
       _totalScore = 0;
 
       _autoLeave = false;
+      _autoPark = false;
       _autoHiveTips = 0;
       _autoGardenElements = 0;
 
@@ -65,22 +68,19 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Resetare Scor'),
+          title: const Text('Score reset'),
           content: const Text(
-            'Ești sigur că vrei să resetezi tot scorul? Această acțiune nu poate fi anulată.',
+            'This will reset all scores to 0. Are you sure you want to continue?',
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('ANULEAZĂ'),
+              child: const Text('CANCEL'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
-                'RESETEAZĂ',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('RESET', style: TextStyle(color: Colors.red)),
               onPressed: () {
                 _resetScores();
                 Navigator.of(context).pop();
@@ -145,7 +145,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Resetează scorul',
+            tooltip: 'Reset score',
             onPressed: _showResetConfirmationDialog,
           ),
         ],
@@ -189,6 +189,10 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                 const Divider(thickness: 2),
                 _buildCheckboxItem('LEAVE (3 pts)', _autoLeave, (val) {
                   setState(() => _autoLeave = val ?? false);
+                  _calculateTotalScore();
+                }),
+                _buildCheckboxItem('PARK (5 pts)', _autoPark, (val) {
+                  setState(() => _autoPark = val ?? false);
                   _calculateTotalScore();
                 }),
                 _buildCounterItem(
