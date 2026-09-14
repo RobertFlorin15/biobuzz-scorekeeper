@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scorekeeper_biobuzz/widgets/CheckboxWidget.dart';
+import 'package:scorekeeper_biobuzz/widgets/CounterWidget.dart';
+import 'package:scorekeeper_biobuzz/ScoreController.dart';
 
 class SoloTrainingPage extends StatefulWidget {
   const SoloTrainingPage({super.key});
@@ -8,59 +11,7 @@ class SoloTrainingPage extends StatefulWidget {
 }
 
 class _SoloTrainingPageState extends State<SoloTrainingPage> {
-  int _totalScore = 0;
-
-  bool _autoLeave = false;
-  bool _autoPark = false;
-  int _autoHiveTips = 0;
-  int _autoGardenElements = 0;
-
-  int _teleopHiveTips = 0;
-  int _teleopGardenElements = 0;
-  bool _teleopBottomNectar = false;
-  bool _teleopFlowerOwner = false;
-  int _teleopFlowerElements = 0;
-
-  int _postMatchCellElements = 0;
-  bool _postMatchPark = false;
-
-  void _calculateTotalScore() {
-    setState(() {
-      _totalScore = 0;
-      if (_autoLeave) _totalScore += 3;
-      if (_autoPark) _totalScore += 5;
-      _totalScore += _autoHiveTips * 20;
-      _totalScore += _autoGardenElements * 1;
-
-      _totalScore += _teleopHiveTips * 20;
-      _totalScore += _teleopGardenElements * 1;
-      if (_teleopBottomNectar) _totalScore += 5;
-      _totalScore += _teleopFlowerElements * 2;
-
-      _totalScore += _postMatchCellElements * 2;
-      if (_postMatchPark) _totalScore += 5;
-    });
-  }
-
-  void _resetScores() {
-    setState(() {
-      _totalScore = 0;
-
-      _autoLeave = false;
-      _autoPark = false;
-      _autoHiveTips = 0;
-      _autoGardenElements = 0;
-
-      _teleopHiveTips = 0;
-      _teleopGardenElements = 0;
-      _teleopBottomNectar = false;
-      _teleopFlowerOwner = false;
-      _teleopFlowerElements = 0;
-
-      _postMatchCellElements = 0;
-      _postMatchPark = false;
-    });
-  }
+  final ScoreController _scoreController = ScoreController();
 
   Future<void> _showResetConfirmationDialog() async {
     return showDialog<void>(
@@ -82,57 +33,15 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
             TextButton(
               child: const Text('RESET', style: TextStyle(color: Colors.red)),
               onPressed: () {
-                _resetScores();
+                setState(() {
+                  _scoreController.resetScores();
+                });
                 Navigator.of(context).pop();
               },
             ),
           ],
         );
       },
-    );
-  }
-
-  Widget _buildCounterItem(
-    String label,
-    int count,
-    VoidCallback onIncrement,
-    VoidCallback onDecrement,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 16)),
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.remove_circle_outline),
-              onPressed: onDecrement,
-            ),
-            Text(
-              count.toString(),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            IconButton(
-              icon: const Icon(Icons.add_circle_outline),
-              onPressed: onIncrement,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCheckboxItem(
-    String label,
-    bool value,
-    ValueChanged<bool?> onChanged,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 16)),
-        Checkbox(value: value, onChanged: onChanged),
-      ],
     );
   }
 
@@ -163,7 +72,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '$_totalScore',
+                  '${_scoreController.totalScore}',
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -187,37 +96,50 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                   ),
                 ),
                 const Divider(thickness: 2),
-                _buildCheckboxItem('LEAVE (3 pts)', _autoLeave, (val) {
-                  setState(() => _autoLeave = val ?? false);
-                  _calculateTotalScore();
-                }),
-                _buildCheckboxItem('PARK (5 pts)', _autoPark, (val) {
-                  setState(() => _autoPark = val ?? false);
-                  _calculateTotalScore();
-                }),
-                _buildCounterItem(
-                  'HIVE TIPS (20 pts)',
-                  _autoHiveTips,
-                  () {
-                    setState(() => _autoHiveTips++);
-                    _calculateTotalScore();
-                  },
-                  () {
-                    if (_autoHiveTips > 0) setState(() => _autoHiveTips--);
-                    _calculateTotalScore();
+                CheckboxWidget(
+                  label: 'LEAVE (3 pts)',
+                  value: _scoreController.autoLeave,
+                  onChanged: (val) {
+                    setState(() {
+                      _scoreController.toggleAutoLeave(val ?? false);
+                    });
                   },
                 ),
-                _buildCounterItem(
-                  'GARDEN Elements (1 pt)',
-                  _autoGardenElements,
-                  () {
-                    setState(() => _autoGardenElements++);
-                    _calculateTotalScore();
+                CheckboxWidget(
+                  label: 'PARK (5 pts)',
+                  value: _scoreController.autoPark,
+                  onChanged: (val) {
+                    setState(() {
+                      _scoreController.toggleAutoPark(val ?? false);
+                    });
                   },
-                  () {
-                    if (_autoGardenElements > 0)
-                      setState(() => _autoGardenElements--);
-                    _calculateTotalScore();
+                ),
+                CounterWidget(
+                  label: 'HIVE TIPS (20 pts)',
+                  count: _scoreController.autoHiveTips,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementAutoHiveTips();
+                    });
+                  },
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementAutoHiveTips();
+                    });
+                  },
+                ),
+                CounterWidget(
+                  label: 'GARDEN Elements (1 pt)',
+                  count: _scoreController.autoGardenElements,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementAutoGardenElements();
+                    });
+                  },
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementAutoGardenElements();
+                    });
                   },
                 ),
 
@@ -232,29 +154,32 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                   ),
                 ),
                 const Divider(thickness: 2),
-                _buildCounterItem(
-                  'HIVE TIPS (20 pts)',
-                  _teleopHiveTips,
-                  () {
-                    setState(() => _teleopHiveTips++);
-                    _calculateTotalScore();
+                CounterWidget(
+                  label: 'HIVE TIPS (20 pts)',
+                  count: _scoreController.teleopHiveTips,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementTeleopHiveTips();
+                    });
                   },
-                  () {
-                    if (_teleopHiveTips > 0) setState(() => _teleopHiveTips--);
-                    _calculateTotalScore();
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementTeleopHiveTips();
+                    });
                   },
                 ),
-                _buildCounterItem(
-                  'GARDEN Elements (1 pt)',
-                  _teleopGardenElements,
-                  () {
-                    setState(() => _teleopGardenElements++);
-                    _calculateTotalScore();
+                CounterWidget(
+                  label: 'GARDEN Elements (1 pt)',
+                  count: _scoreController.teleopGardenElements,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementTeleopGardenElements();
+                    });
                   },
-                  () {
-                    if (_teleopGardenElements > 0)
-                      setState(() => _teleopGardenElements--);
-                    _calculateTotalScore();
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementTeleopGardenElements();
+                    });
                   },
                 ),
 
@@ -269,32 +194,36 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                     ),
                   ),
                 ),
-                _buildCheckboxItem(
-                  'Bottom NECTAR Bonus (5 pts)',
-                  _teleopBottomNectar,
-                  (val) {
-                    setState(() => _teleopBottomNectar = val ?? false);
-                    _calculateTotalScore();
+                CheckboxWidget(
+                  label: 'Bottom NECTAR Bonus (5 pts)',
+                  value: _scoreController.teleopBottomNectar,
+                  onChanged: (val) {
+                    setState(() {
+                      _scoreController.toggleTeleopBottomNectar(val ?? false);
+                    });
                   },
                 ),
-                _buildCheckboxItem(
-                  'FLOWER Owner (Required for score)',
-                  _teleopFlowerOwner,
-                  (val) {
-                    setState(() => _teleopFlowerOwner = val ?? false);
+                CheckboxWidget(
+                  label: 'FLOWER Owner (Required for score)',
+                  value: _scoreController.teleopFlowerOwner,
+                  onChanged: (val) {
+                    setState(() {
+                      _scoreController.toggleTeleopFlowerOwner(val ?? false);
+                    });
                   },
                 ),
-                _buildCounterItem(
-                  'FLOWER Elements (2 pts)',
-                  _teleopFlowerElements,
-                  () {
-                    setState(() => _teleopFlowerElements++);
-                    _calculateTotalScore();
+                CounterWidget(
+                  label: 'FLOWER Elements (2 pts)',
+                  count: _scoreController.teleopFlowerElements,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementTeleopFlowerElements();
+                    });
                   },
-                  () {
-                    if (_teleopFlowerElements > 0)
-                      setState(() => _teleopFlowerElements--);
-                    _calculateTotalScore();
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementTeleopFlowerElements();
+                    });
                   },
                 ),
 
@@ -309,23 +238,29 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                   ),
                 ),
                 const Divider(thickness: 2),
-                _buildCounterItem(
-                  'CELL Elements (2 pts)',
-                  _postMatchCellElements,
-                  () {
-                    setState(() => _postMatchCellElements++);
-                    _calculateTotalScore();
+                CounterWidget(
+                  label: 'CELL Elements (2 pts)',
+                  count: _scoreController.postMatchCellElements,
+                  onIncrement: () {
+                    setState(() {
+                      _scoreController.incrementPostMatchCellElements();
+                    });
                   },
-                  () {
-                    if (_postMatchCellElements > 0)
-                      setState(() => _postMatchCellElements--);
-                    _calculateTotalScore();
+                  onDecrement: () {
+                    setState(() {
+                      _scoreController.decrementPostMatchCellElements();
+                    });
                   },
                 ),
-                _buildCheckboxItem('PARK (5 pts)', _postMatchPark, (val) {
-                  setState(() => _postMatchPark = val ?? false);
-                  _calculateTotalScore();
-                }),
+                CheckboxWidget(
+                  label: 'PARK (5 pts)',
+                  value: _scoreController.postMatchPark,
+                  onChanged: (val) {
+                    setState(() {
+                      _scoreController.togglePostMatchPark(val ?? false);
+                    });
+                  },
+                ),
               ],
             ),
           ),
