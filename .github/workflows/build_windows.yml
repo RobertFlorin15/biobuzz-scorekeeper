@@ -26,13 +26,10 @@ jobs:
     - name: Build Windows Release
       run: flutter build windows --release
 
-    - name: Setup Inno Setup
-      uses: MinM/setup-inno-setup@v1
+    - name: Build Inno Setup Installer
+      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
       with:
-        inno-version: '6.2.2'
-
-    - name: Build Inno Setup Script
-      run: iscc installer_script.iss
+        path: installer_script.iss
 
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4
