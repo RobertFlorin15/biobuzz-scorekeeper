@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scorekeeper_biobuzz/pages/SoloTrainingPage.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -33,12 +34,12 @@ class StartPage extends StatelessWidget {
                       elevation: 8,
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const SoloTrainingPage(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SoloTrainingPage(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'TRAINING SOLO',
