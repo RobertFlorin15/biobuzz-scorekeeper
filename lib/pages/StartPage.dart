@@ -52,6 +52,20 @@ class StartPage extends StatelessWidget {
                     text: 'SOLO',
                     destinationPage: SoloTrainingPage(),
                   ),
+                  const SizedBox(
+                    height: 32,
+                  ), // Spațiu între butoane și textul de subsol
+                  // Mesajul adăugat
+                  const Text(
+                    'Developed with ❤️ by Robert | 19061am 17962m 19075m 30324m for the FTC community',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors
+                          .white70, // Alb ușor transparent pentru a nu distrage atenția de la butoane
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),
