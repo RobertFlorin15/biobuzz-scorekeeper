@@ -7,6 +7,7 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
+  audioplayers: ^6.8.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.4.3
@@ -20,3 +21,10 @@ flutter:
   uses-material-design: true
   assets:
   - assets/images/background_dark.png
+  - assets/images/background.png
+  - assets/images/white_logo_biobuzz.png
+  - assets/images/background_windows.png
+  - assets/sounds/3-2-1-go.mp3
+  - assets/sounds/8s_pause.mp3
+  - assets/sounds/endgame.mp3
+  - assets/sounds/final.mp3

@@ -8,11 +8,20 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    final isDesktop = size.width > size.height;
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/images/background_dark.png', fit: BoxFit.cover),
+          Image.asset(
+            isDesktop
+                ? 'assets/images/background_windows.png'
+                : 'assets/images/background.png',
+            fit: BoxFit.cover,
+          ),
           Container(color: Colors.black.withValues(alpha: 0.4)),
           SafeArea(
             child: Padding(
@@ -21,20 +30,26 @@ class StartPage extends StatelessWidget {
                 vertical: 48.0,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Spacer(),
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/white_logo_biobuzz.png',
+                        width: 300,
+                      ),
+                    ),
+                  ),
 
                   const ElevatedButtonStartPage(
-                    text: 'TRAINING SOLO TIMER',
+                    text: 'SOLO TIMER',
                     destinationPage: SoloTrainingTimerPage(),
                   ),
 
                   const SizedBox(height: 16),
 
                   const ElevatedButtonStartPage(
-                    text: 'TRAINING SOLO',
+                    text: 'SOLO',
                     destinationPage: SoloTrainingPage(),
                   ),
                 ],
