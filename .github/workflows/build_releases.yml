@@ -1,4 +1,4 @@
-name: Build APK and Windows EXE
+name: Build APK, Windows EXE and Linux
 
 on:
   push:
@@ -73,7 +73,7 @@ jobs:
           name: Scorekeeper-BioBuzz-Windows
           path: build\windows\installer\Scorekeeper_BioBuzz_Setup_v1.0.0.exe
 
-build-linux:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
