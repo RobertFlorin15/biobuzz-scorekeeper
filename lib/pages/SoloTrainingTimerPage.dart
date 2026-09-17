@@ -29,7 +29,7 @@ class SoloTrainingTimerPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SOLO TRAINING TIMER'),
+        title: const Text('SOLO TIMER'),
         backgroundColor: Colors.amber,
         actions: [
           IconButton(

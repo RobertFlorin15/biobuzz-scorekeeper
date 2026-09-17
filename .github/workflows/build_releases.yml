@@ -6,7 +6,6 @@ on:
   workflow_dispatch: 
 
 jobs:
-  # === JOB 1: Construiește versiunea de Android ===
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +35,6 @@ jobs:
           name: Scorekeeper-BioBuzz-APK
           path: build/app/outputs/flutter-apk/app-release.apk
 
-  # === JOB 2: Construiește versiunea de Windows ===
   build-windows:
     runs-on: windows-latest
     steps:
