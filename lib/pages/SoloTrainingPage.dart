@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scorekeeper_biobuzz/widgets/CheckboxWidget.dart';
 import 'package:scorekeeper_biobuzz/widgets/CounterWidget.dart';
-import 'package:scorekeeper_biobuzz/util/ScoreController.dart';
+import 'package:scorekeeper_biobuzz/util/ScoreProvider.dart';
 
-class SoloTrainingPage extends StatefulWidget {
+class SoloTrainingPage extends ConsumerWidget {
   const SoloTrainingPage({super.key});
 
-  @override
-  State<SoloTrainingPage> createState() => _SoloTrainingPageState();
-}
-
-class _SoloTrainingPageState extends State<SoloTrainingPage> {
-  final ScoreController _scoreController = ScoreController();
-
-  Future<void> _showResetConfirmationDialog() async {
+  Future<void> _showResetConfirmationDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -33,9 +30,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
             TextButton(
               child: const Text('RESET', style: TextStyle(color: Colors.red)),
               onPressed: () {
-                setState(() {
-                  _scoreController.resetScores();
-                });
+                ref.read(scoreProvider.notifier).resetScores();
                 Navigator.of(context).pop();
               },
             ),
@@ -46,7 +41,10 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scoreState = ref.watch(scoreProvider);
+    final scoreNotifier = ref.read(scoreProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('SOLO TRAINING'),
@@ -55,7 +53,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
           IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: 'Reset score',
-            onPressed: _showResetConfirmationDialog,
+            onPressed: () => _showResetConfirmationDialog(context, ref),
           ),
         ],
       ),
@@ -72,7 +70,7 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '${_scoreController.totalScore}',
+                  '${scoreState.totalScore}',
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -98,49 +96,29 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                 const Divider(thickness: 2),
                 CheckboxWidget(
                   label: 'LEAVE (3 pts)',
-                  value: _scoreController.autoLeave,
-                  onChanged: (val) {
-                    setState(() {
-                      _scoreController.toggleAutoLeave(val ?? false);
-                    });
-                  },
+                  value: scoreState.autoLeave,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleAutoLeave(val ?? false),
                 ),
                 CheckboxWidget(
                   label: 'PARK (5 pts)',
-                  value: _scoreController.autoPark,
-                  onChanged: (val) {
-                    setState(() {
-                      _scoreController.toggleAutoPark(val ?? false);
-                    });
-                  },
+                  value: scoreState.autoPark,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleAutoPark(val ?? false),
                 ),
                 CounterWidget(
                   label: 'HIVE TIPS (20 pts)',
-                  count: _scoreController.autoHiveTips,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementAutoHiveTips();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementAutoHiveTips();
-                    });
-                  },
+                  count: scoreState.autoHiveTips,
+                  onIncrement: () => scoreNotifier.incrementAutoHiveTips(),
+                  onDecrement: () => scoreNotifier.decrementAutoHiveTips(),
                 ),
                 CounterWidget(
                   label: 'GARDEN Elements (1 pt)',
-                  count: _scoreController.autoGardenElements,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementAutoGardenElements();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementAutoGardenElements();
-                    });
-                  },
+                  count: scoreState.autoGardenElements,
+                  onIncrement: () =>
+                      scoreNotifier.incrementAutoGardenElements(),
+                  onDecrement: () =>
+                      scoreNotifier.decrementAutoGardenElements(),
                 ),
 
                 const SizedBox(height: 24),
@@ -156,31 +134,17 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                 const Divider(thickness: 2),
                 CounterWidget(
                   label: 'HIVE TIPS (20 pts)',
-                  count: _scoreController.teleopHiveTips,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementTeleopHiveTips();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementTeleopHiveTips();
-                    });
-                  },
+                  count: scoreState.teleopHiveTips,
+                  onIncrement: () => scoreNotifier.incrementTeleopHiveTips(),
+                  onDecrement: () => scoreNotifier.decrementTeleopHiveTips(),
                 ),
                 CounterWidget(
                   label: 'GARDEN Elements (1 pt)',
-                  count: _scoreController.teleopGardenElements,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementTeleopGardenElements();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementTeleopGardenElements();
-                    });
-                  },
+                  count: scoreState.teleopGardenElements,
+                  onIncrement: () =>
+                      scoreNotifier.incrementTeleopGardenElements(),
+                  onDecrement: () =>
+                      scoreNotifier.decrementTeleopGardenElements(),
                 ),
 
                 const Padding(
@@ -196,35 +160,23 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                 ),
                 CheckboxWidget(
                   label: 'Bottom NECTAR Bonus (5 pts)',
-                  value: _scoreController.teleopBottomNectar,
-                  onChanged: (val) {
-                    setState(() {
-                      _scoreController.toggleTeleopBottomNectar(val ?? false);
-                    });
-                  },
+                  value: scoreState.teleopBottomNectar,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleTeleopBottomNectar(val ?? false),
                 ),
                 CheckboxWidget(
                   label: 'FLOWER Owner (Required for score)',
-                  value: _scoreController.teleopFlowerOwner,
-                  onChanged: (val) {
-                    setState(() {
-                      _scoreController.toggleTeleopFlowerOwner(val ?? false);
-                    });
-                  },
+                  value: scoreState.teleopFlowerOwner,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleTeleopFlowerOwner(val ?? false),
                 ),
                 CounterWidget(
                   label: 'FLOWER Elements (2 pts)',
-                  count: _scoreController.teleopFlowerElements,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementTeleopFlowerElements();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementTeleopFlowerElements();
-                    });
-                  },
+                  count: scoreState.teleopFlowerElements,
+                  onIncrement: () =>
+                      scoreNotifier.incrementTeleopFlowerElements(),
+                  onDecrement: () =>
+                      scoreNotifier.decrementTeleopFlowerElements(),
                 ),
 
                 const SizedBox(height: 24),
@@ -240,26 +192,17 @@ class _SoloTrainingPageState extends State<SoloTrainingPage> {
                 const Divider(thickness: 2),
                 CounterWidget(
                   label: 'CELL Elements (2 pts)',
-                  count: _scoreController.postMatchCellElements,
-                  onIncrement: () {
-                    setState(() {
-                      _scoreController.incrementPostMatchCellElements();
-                    });
-                  },
-                  onDecrement: () {
-                    setState(() {
-                      _scoreController.decrementPostMatchCellElements();
-                    });
-                  },
+                  count: scoreState.postMatchCellElements,
+                  onIncrement: () =>
+                      scoreNotifier.incrementPostMatchCellElements(),
+                  onDecrement: () =>
+                      scoreNotifier.decrementPostMatchCellElements(),
                 ),
                 CheckboxWidget(
                   label: 'PARK (5 pts)',
-                  value: _scoreController.postMatchPark,
-                  onChanged: (val) {
-                    setState(() {
-                      _scoreController.togglePostMatchPark(val ?? false);
-                    });
-                  },
+                  value: scoreState.postMatchPark,
+                  onChanged: (val) =>
+                      scoreNotifier.togglePostMatchPark(val ?? false),
                 ),
               ],
             ),
