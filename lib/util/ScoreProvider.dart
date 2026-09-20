@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MatchScoreState {
   final int totalScore;
 
-  final bool autoLeave;
-  final bool autoPark;
+  final bool autoLeaveR1;
+  final bool autoLeaveR2;
+  final bool autoParkR1;
+  final bool autoParkR2;
   final int autoHiveTips;
   final int autoGardenElements;
 
@@ -15,12 +17,15 @@ class MatchScoreState {
   final int teleopFlowerElements;
 
   final int postMatchCellElements;
-  final bool postMatchPark;
+  final bool postMatchParkR1;
+  final bool postMatchParkR2;
 
   const MatchScoreState({
     this.totalScore = 0,
-    this.autoLeave = false,
-    this.autoPark = false,
+    this.autoLeaveR1 = false,
+    this.autoLeaveR2 = false,
+    this.autoParkR1 = false,
+    this.autoParkR2 = false,
     this.autoHiveTips = 0,
     this.autoGardenElements = 0,
     this.teleopHiveTips = 0,
@@ -29,13 +34,16 @@ class MatchScoreState {
     this.teleopFlowerOwner = false,
     this.teleopFlowerElements = 0,
     this.postMatchCellElements = 0,
-    this.postMatchPark = false,
+    this.postMatchParkR1 = false,
+    this.postMatchParkR2 = false,
   });
 
   MatchScoreState copyWith({
     int? totalScore,
-    bool? autoLeave,
-    bool? autoPark,
+    bool? autoLeaveR1,
+    bool? autoLeaveR2,
+    bool? autoParkR1,
+    bool? autoParkR2,
     int? autoHiveTips,
     int? autoGardenElements,
     int? teleopHiveTips,
@@ -44,12 +52,15 @@ class MatchScoreState {
     bool? teleopFlowerOwner,
     int? teleopFlowerElements,
     int? postMatchCellElements,
-    bool? postMatchPark,
+    bool? postMatchParkR1,
+    bool? postMatchParkR2,
   }) {
     return MatchScoreState(
       totalScore: totalScore ?? this.totalScore,
-      autoLeave: autoLeave ?? this.autoLeave,
-      autoPark: autoPark ?? this.autoPark,
+      autoLeaveR1: autoLeaveR1 ?? this.autoLeaveR1,
+      autoLeaveR2: autoLeaveR2 ?? this.autoLeaveR2,
+      autoParkR1: autoParkR1 ?? this.autoParkR1,
+      autoParkR2: autoParkR2 ?? this.autoParkR2,
       autoHiveTips: autoHiveTips ?? this.autoHiveTips,
       autoGardenElements: autoGardenElements ?? this.autoGardenElements,
       teleopHiveTips: teleopHiveTips ?? this.teleopHiveTips,
@@ -59,7 +70,8 @@ class MatchScoreState {
       teleopFlowerElements: teleopFlowerElements ?? this.teleopFlowerElements,
       postMatchCellElements:
           postMatchCellElements ?? this.postMatchCellElements,
-      postMatchPark: postMatchPark ?? this.postMatchPark,
+      postMatchParkR1: postMatchParkR1 ?? this.postMatchParkR1,
+      postMatchParkR2: postMatchParkR2 ?? this.postMatchParkR2,
     );
   }
 }
@@ -72,8 +84,10 @@ class ScoreNotifier extends Notifier<MatchScoreState> {
     int newTotal = 0;
 
     // AUTO
-    if (newState.autoLeave) newTotal += 3;
-    if (newState.autoPark) newTotal += 5;
+    if (newState.autoLeaveR1) newTotal += 3;
+    if (newState.autoLeaveR2) newTotal += 3;
+    if (newState.autoParkR1) newTotal += 5;
+    if (newState.autoParkR2) newTotal += 5;
     newTotal += newState.autoHiveTips * 20;
     newTotal += newState.autoGardenElements * 1;
 
@@ -88,15 +102,20 @@ class ScoreNotifier extends Notifier<MatchScoreState> {
     }
 
     newTotal += newState.postMatchCellElements * 2;
-    if (newState.postMatchPark) newTotal += 5;
+    if (newState.postMatchParkR1) newTotal += 5;
+    if (newState.postMatchParkR2) newTotal += 5;
 
     state = newState.copyWith(totalScore: newTotal);
   }
 
-  void toggleAutoLeave(bool value) =>
-      _updateScore(state.copyWith(autoLeave: value));
-  void toggleAutoPark(bool value) =>
-      _updateScore(state.copyWith(autoPark: value));
+  void toggleAutoLeaveR1(bool value) =>
+      _updateScore(state.copyWith(autoLeaveR1: value));
+  void toggleAutoParkR1(bool value) =>
+      _updateScore(state.copyWith(autoParkR1: value));
+  void toggleAutoLeaveR2(bool value) =>
+      _updateScore(state.copyWith(autoLeaveR2: value));
+  void toggleAutoParkR2(bool value) =>
+      _updateScore(state.copyWith(autoParkR2: value));
   void incrementAutoHiveTips() =>
       _updateScore(state.copyWith(autoHiveTips: state.autoHiveTips + 1));
   void decrementAutoHiveTips() {
@@ -155,8 +174,11 @@ class ScoreNotifier extends Notifier<MatchScoreState> {
       );
   }
 
-  void togglePostMatchPark(bool value) =>
-      _updateScore(state.copyWith(postMatchPark: value));
+  void togglePostMatchParkR1(bool value) =>
+      _updateScore(state.copyWith(postMatchParkR1: value));
+
+  void togglePostMatchParkR2(bool value) =>
+      _updateScore(state.copyWith(postMatchParkR2: value));
 
   void resetScores() {
     state = const MatchScoreState();

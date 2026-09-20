@@ -4,8 +4,8 @@ import 'package:scorekeeper_biobuzz/widgets/CheckboxWidget.dart';
 import 'package:scorekeeper_biobuzz/widgets/CounterWidget.dart';
 import 'package:scorekeeper_biobuzz/util/ScoreProvider.dart';
 
-class SoloTrainingPage extends ConsumerWidget {
-  const SoloTrainingPage({super.key});
+class DuoTrainingPage extends ConsumerWidget {
+  const DuoTrainingPage({super.key});
 
   Future<void> _showResetConfirmationDialog(
     BuildContext context,
@@ -47,7 +47,7 @@ class SoloTrainingPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SOLO TRAINING'),
+        title: const Text('DUO TRAINING'),
         backgroundColor: Colors.amber,
         actions: [
           IconButton(
@@ -95,16 +95,28 @@ class SoloTrainingPage extends ConsumerWidget {
                 ),
                 const Divider(thickness: 2),
                 CheckboxWidget(
-                  label: 'LEAVE (3 pts)',
+                  label: 'LEAVE (R1) (3 pts)',
                   value: scoreState.autoLeaveR1,
                   onChanged: (val) =>
                       scoreNotifier.toggleAutoLeaveR1(val ?? false),
                 ),
                 CheckboxWidget(
-                  label: 'PARK (5 pts)',
+                  label: 'LEAVE (R2) (3 pts)',
+                  value: scoreState.autoLeaveR2,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleAutoLeaveR2(val ?? false),
+                ),
+                CheckboxWidget(
+                  label: 'PARK (R1) (5 pts)',
                   value: scoreState.autoParkR1,
                   onChanged: (val) =>
                       scoreNotifier.toggleAutoParkR1(val ?? false),
+                ),
+                CheckboxWidget(
+                  label: 'PARK (R2) (5 pts)',
+                  value: scoreState.autoParkR2,
+                  onChanged: (val) =>
+                      scoreNotifier.toggleAutoParkR2(val ?? false),
                 ),
                 CounterWidget(
                   label: 'HIVE TIPS (20 pts)',
@@ -199,10 +211,16 @@ class SoloTrainingPage extends ConsumerWidget {
                       scoreNotifier.decrementPostMatchCellElements(),
                 ),
                 CheckboxWidget(
-                  label: 'PARK (5 pts)',
+                  label: 'PARK (R1) (5 pts)',
                   value: scoreState.postMatchParkR1,
                   onChanged: (val) =>
                       scoreNotifier.togglePostMatchParkR1(val ?? false),
+                ),
+                CheckboxWidget(
+                  label: 'PARK (R2) (5 pts)',
+                  value: scoreState.postMatchParkR2,
+                  onChanged: (val) =>
+                      scoreNotifier.togglePostMatchParkR2(val ?? false),
                 ),
               ],
             ),

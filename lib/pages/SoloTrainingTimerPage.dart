@@ -141,15 +141,15 @@ class SoloTrainingTimerPage extends ConsumerWidget {
                         const Divider(thickness: 2),
                         CheckboxWidget(
                           label: 'LEAVE (3 pts)',
-                          value: scoreState.autoLeave,
+                          value: scoreState.autoLeaveR1,
                           onChanged: (val) =>
-                              scoreNotifier.toggleAutoLeave(val ?? false),
+                              scoreNotifier.toggleAutoLeaveR1(val ?? false),
                         ),
                         CheckboxWidget(
                           label: 'PARK (5 pts)',
-                          value: scoreState.autoPark,
+                          value: scoreState.autoParkR1,
                           onChanged: (val) =>
-                              scoreNotifier.toggleAutoPark(val ?? false),
+                              scoreNotifier.toggleAutoParkR1(val ?? false),
                         ),
                         CounterWidget(
                           label: 'HIVE TIPS (20 pts)',
@@ -280,9 +280,9 @@ class SoloTrainingTimerPage extends ConsumerWidget {
                         ),
                         CheckboxWidget(
                           label: 'PARK (5 pts)',
-                          value: scoreState.postMatchPark,
+                          value: scoreState.postMatchParkR1,
                           onChanged: (val) =>
-                              scoreNotifier.togglePostMatchPark(val ?? false),
+                              scoreNotifier.togglePostMatchParkR1(val ?? false),
                         ),
                       ],
                     ),

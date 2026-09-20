@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scorekeeper_biobuzz/pages/DuoTrainingPage.dart';
 import 'package:scorekeeper_biobuzz/pages/SoloTrainingPage.dart';
 import 'package:scorekeeper_biobuzz/pages/SoloTrainingTimerPage.dart';
 import 'package:scorekeeper_biobuzz/widgets/ElevatedButtonStartPage.dart';
@@ -40,6 +41,13 @@ class StartPage extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  const ElevatedButtonStartPage(
+                    text: 'DUO',
+                    destinationPage: DuoTrainingPage(),
+                  ),
+
+                  const SizedBox(height: 16),
 
                   const ElevatedButtonStartPage(
                     text: 'SOLO TIMER',
