@@ -20,8 +20,7 @@ This application provides teams with a reliable way to calculate scores, simulat
 
 *   **⚡ High Performance:** Built with clean architecture and **Riverpod** for robust, zero-lag state management.
 
-*   **🤖 CI/CD Automation:** Automated workflows via GitHub Actions generate ready-to-install `.apk` and `.exe` files on every release.
-
+*   **🤖 CI/CD Automation:** Automated workflows via GitHub Actions generate ready-to-use `.apk`, `.exe`, and Linux binaries on every release.
 
 ## 📥 Downloads & Installation
 
@@ -36,6 +35,8 @@ You don't need to build the project from source to use it. Automated builds are 
    *   **Android:** Download the `.apk` file and install it directly on your device.
 
    *   **Windows:** Download the `Scorekeeper_BioBuzz_Setup.exe` installer for a standard desktop installation.
+
+   *   **Linux:** Download the Linux artifact, extract the archive, and run the `scorekeeper_biobuzz` executable directly.
 
 
 ## 🛠️ Tech Stack
